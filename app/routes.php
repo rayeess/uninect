@@ -11,10 +11,19 @@
 |
 */
 
-Route::get('/', function()
-{
-	return View::make('hello');
-});
+//Auth Resource
+Route::get('signup',array('as'=>'signup_form', 'before'=>'is_guest', 'uses'=>'AuthController@getSignup'));
+
+Route::post('signup',array('as'=>'signup_form_post', 'before'=>'csrf|is_guest', 'uses'=>'AuthController@postSignup'));
+
+Route::post('login',array('as'=>'login_post', 'before'=>'csrf|is_guest', 'uses'=>'AuthController@postLogin'));
+
+Route::get('logout',array('as'=>'logout', 'before'=>'user', 'uses'=>'AuthController@getLogout'));
+
+//---- Q & A Resources
+Route::get('/',array('as'=>'index','uses'=>'MainController@getIndex'));
+
+
 
 /**
 * This method is to create an admin once.
