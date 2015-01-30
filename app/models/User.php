@@ -15,4 +15,7 @@ class User extends Cartalyst\Sentry\Users\Eloquent\User {
     	'password' => 'required|min:6'
     );
 	
+    public function questions() {
+        return $this->hasMany('Question','userID');
+    }
 }
