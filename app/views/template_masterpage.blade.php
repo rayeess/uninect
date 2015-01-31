@@ -47,5 +47,20 @@
 
       {{-- Each page's custom assets (if available) will be yielded here --}}
       @yield('footer_assets')
+
+      {{-- if the user is logged in and on index or question details page--}}
+      @if(Sentry::check() && (Route::currentRouteName() == 'index' || Route::currentRouteName() == 'question_details'))
+      <script type="text/javascript">
+            $('.questions .arrowbox .like, .questions .arrowbox.dislike').click(function(e){
+                  e.preventDefault();
+                  var $this = $(this);
+                  $.get($(this).attr('href'),function($data){
+                        $this.parent('.arrowbox').next('.cntbox').find('.cntcount').text($data);
+                  }).fail(function(){
+                        alert('An error has been occurred, please try again later');
+                  });
+            });
+      </script>
+      @endif
 </body>
 </html>

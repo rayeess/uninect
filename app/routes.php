@@ -38,6 +38,13 @@ Route::get('question/vote/{direction}/{id}',array('as'=>'vote', 'before'=>'user'
 Route::get('question/tagged/{tag}',array('as'=>'tagged','uses'=>'QuestionsController@getTaggedWith'))
         ->where('tag','[0-9a-zA-Z\-\_]+');
 
+//Reply Question:
+Route::post('question/{id}/{title}',array('as'=>'question_reply','before'=>'csrf|user','uses'=>'AnswersController@postReply'))
+        ->where(array('id'=>'[0-9]+','title'=>'[0-9a-zA-Z\-\_]+'));
+
+//Admin Question Deletion
+Route::get('question/delete/{id}',array('as'=>'delete_question','before'=>'access_check:admin','uses'=>'QuestionsController@getDelete'))
+        ->where('id','[0-9]+');
 
 
 /**
