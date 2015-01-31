@@ -24,6 +24,7 @@
         	<div id="userblock">
         		Hello again, {{HTML::link('#',Sentry::getUser()->first_name.' '.Sentry::getUser()->last_name)}}
            	</div>
+           	{{HTML::linkRoute('ask','Ask a Question!', array(), array('class'=>'wybutton'))}}
             {{HTML::linkRoute('logout','Logout',array(),array('class'=>'wybutton'))}}
         </div>
     </div>
