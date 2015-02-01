@@ -17,4 +17,8 @@ class Question extends Eloquent {
 		return $this->belongsToMany('Tag','question_tags')->withTimestamps();
     }
 
+    public function answers() {
+    	return $this->hasMany('Answer', 'QuestionID');
+    }
+
 }

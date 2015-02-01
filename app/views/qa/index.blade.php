@@ -30,12 +30,34 @@
 		        <div class="cntcount">{{$question->votes}}</div>
 		        <div class="cnttext">vote</div>
 	        </div>
+
+	        <?php
+			//does the question have an accepted answer?
+			$answers = $question->answers;
+			$accepted = false; //default false
+			//We loop through each answer, and check if there is an accepted answer
+			if($question->answers!=null)
+			{
+				foreach ($answers as $answer)
+				{
+					//If an accepted answer is found, we break the loop
+					if($answer->correct==1)
+					{ 
+						$accepted=true;
+						break;
+					}
+				}
+			}
+			?>
+			@if($accepted)
+				<div class="cntbox cntgreen">
+			@else
+				<div class="cntbox cntred">
+			@endif
+					<div class="cntcount">{{count($answers)}}</div>
+					<div class="cnttext">answer</div>
+			</div>
 	        
-	        {{--Answer section will be filled later in this chapter--}}
-	        <div class="cntbox">
-	        	<div class="cntcount">0</div>
-	        	<div class="cnttext">answer</div>
-	        </div>
 	        <div class="qtext">
 	        	<div class="qhead">
 	            {{HTML::linkRoute('question_details',$question->title,array($question->id,Str::slug($question->title)))}}

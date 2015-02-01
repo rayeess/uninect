@@ -62,6 +62,49 @@
         {{Form::close()}}
       </div>
     @endif
+
+    @if(count($question->answers))
+      @foreach($question->answers as $answer)
+        @if($answer->correct==1)
+          <div class="rrepol correct">
+        @else
+          <div class="rrepol">
+        @endif
+
+            @if(Sentry::check())
+              <div class="arrowbox">
+                {{HTML::linkRoute('vote_answer','',array('up', $answer->id),array('class'=>'like', 'title'=>'Upvote'))}}
+                {{HTML::linkRoute('vote_answer','',array('down',$answer->id),array('class'=>'dislike','title'=>'Downvote'))}}
+              </div>
+            @endif
+
+            <div class="cntbox">
+              <div class="cntcount">{{$answer->votes}}</div>
+              <div class="cnttext">vote</div>
+            </div>
+
+            @if($answer->correct==1)
+              <div class="bestanswer">best answer</div>
+            @else
+              {{-- if the user is admin or the owner of the question, show the best answer button --}}
+              @if(Sentry::check())
+                @if(Sentry::getUser()->hasAccess('admin') || Sentry::getUser()->id == $question->userID)
+                  <a class="chooseme" href="{{URL::route('choose_answer',$answer->id)}}"><div class="choosebestanswer">choose</div></a>
+                @endif
+              @endif
+            @endif
+
+            <div class="rblock">
+              <div class="rbox">
+                <p>{{nl2br($answer->answer)}}</p>
+              </div>
+              <div class="rrepolinf">
+                <p>Answered by <a href="#">{{$answer->users->first_name.' '.$answer->users->last_name}}</a> around {{date('m/d/Y H:i:s',strtotime($answer->created_at))}}</p>
+    ￼         </div>
+            </div>
+          </div>
+      @endforeach
+    @endif
   </div>
 @stop
 
@@ -88,6 +131,17 @@
       <script type="text/javascript">
         $('li.close a').click(function(){
           return confirm('Are you sure you want to delete this? There is no turning back!');
+        });
+      </script>
+    @endif
+  @endif
+
+  {{-- for admins and question owners --}}
+  @if(Sentry::check())
+    @if(Sentry::getUser()->hasAccess('admin') || Sentry::getUser()->id == $question->userID)
+      <script type="text/javascript">
+        $('a.chooseme').click(function(){
+          return confirm('Are you sure you want to choose this answer as best answer?');
         });
       </script>
     @endif

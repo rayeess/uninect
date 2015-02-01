@@ -30,8 +30,12 @@ Route::post('ask',array('as'=>'ask_post', 'before'=>'user|csrf', 'uses' => 'Ques
 Route::get('question/{id}/{title}',array('as'=> 'question_details', 'uses' => 'QuestionsController@getDetails'))
         ->where(array('id'=>'[0-9]+','title' => '[0-9a-zA-Z\-\_]+'));
 
-//Upvoting and Downvoting
+//Question Upvoting and Downvoting
 Route::get('question/vote/{direction}/{id}',array('as'=>'vote', 'before'=>'user', 'uses'=>'QuestionsController@getvote'))
+        ->where(array('direction'=>'(up|down)', 'id'=>'[0-9]+'));
+
+//Answer Upvoting and Downvoting
+Route::get('answer/vote/{direction}}/{id}',array('as'=>'vote_answer', 'before'=>'user','uses'=>'AnswersController@getVote'))
         ->where(array('direction'=>'(up|down)', 'id'=>'[0-9]+'));
 
 //Question tags page

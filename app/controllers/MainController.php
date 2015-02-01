@@ -6,7 +6,7 @@ class MainController extends BaseController {
 	{
 		return View::make('qa.index')
 			->with('title','Hot Questions!')
-       		->with('questions',Question::with('users','tags')->orderBy('id','desc')->paginate(2));
+       		->with('questions',Question::with('users','tags','answers')->orderBy('id','desc')->paginate(2));
 	}
 
 
