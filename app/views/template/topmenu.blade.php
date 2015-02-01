@@ -15,7 +15,7 @@
 	        {{Form::password('password', array('placeholder' => 'Password'))}}
 	        {{Form::submit('Log in!')}}
 	        {{Form::close()}}
-	        {{HTML::link('signup_form','Register',array(), array('class'=>'wybutton'))}}
+	        {{HTML::linkRoute('signup_form','Register',array(),array('class'=>'wybutton'))}}
 	    </div>
 	</div>
 @else
