@@ -166,4 +166,20 @@ class QuestionsController extends BaseController {
     }
   }
 
+  /**
+   * Shows the questions tagged with $tag friendly URL
+  **/
+  public function getTaggedWith($tag)
+  {
+    $tag = Tag::where('tagFriendly',$tag)->first();
+    if($tag) {
+      return View::make('qa.index')
+        ->with('title','Questions Tagged with: '.$tag->tag)
+        ->with('questions',$tag->questions()->with('users','tags','answers')->paginate(2));
+    } else {
+      return Redirect::route('index')
+        ->with('error','Tag not found');
+    }
+  }
+
 }

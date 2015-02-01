@@ -49,7 +49,7 @@
       @yield('footer_assets')
 
       {{-- if the user is logged in and on index or question details page--}}
-      @if(Sentry::check() && (Route::currentRouteName() == 'index' || Route::currentRouteName() == 'question_details'))
+      @if(Sentry::check() && (Route::currentRouteName() == 'index' || Route::currentRouteName() == 'tagged' || Route::currentRouteName() == 'question_details'))
       <script type="text/javascript">
             $('.questions .arrowbox .like, .questions .arrowbox.dislike').click(function(e){
                   e.preventDefault();
