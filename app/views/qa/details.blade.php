@@ -100,6 +100,16 @@
               </div>
               <div class="rrepolinf">
                 <p>Answered by <a href="#">{{$answer->users->first_name.' '.$answer->users->last_name}}</a> around {{date('m/d/Y H:i:s',strtotime($answer->created_at))}}</p>
+                {{-- Only the answer's owner or the admin can delete the answer --}}
+                @if(Sentry::check())
+                  <div class="qwrap">
+                    <ul class="fastbar">
+                      @if(Sentry::getUser()->hasAccess('admin') || Sentry::getUser()->id == $answer->userID)
+                        <li class="close">{{HTML::linkRoute('delete_answer','delete',$answer->id)}}</li>
+                      @endif
+                    </ul>
+                  </div>
+                @endif
     ￼         </div>
             </div>
           </div>

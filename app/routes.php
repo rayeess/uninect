@@ -50,6 +50,9 @@ Route::post('question/{id}/{title}',array('as'=>'question_reply','before'=>'csrf
 Route::get('question/delete/{id}',array('as'=>'delete_question','before'=>'access_check:admin','uses'=>'QuestionsController@getDelete'))
         ->where('id','[0-9]+');
 
+//Deleting an answer
+Route::get('answer/delete/{id}',array('as'=>'delete_answer','before'=>'user', 'uses'=>'AnswersController@getDelete'))->where('id','[0-9]+');
+
 
 /**
 * This method is to create an admin once.

@@ -1,6 +1,6 @@
 <?php
 
-class AnswersController extends \BaseController {
+class AnswersController extends BaseController {
 
 	/**
 	 * Adds a reply to the questions
@@ -67,6 +67,61 @@ class AnswersController extends \BaseController {
       }
     } else {
       return Redirect::route('index');
+    }
+  }
+
+  /**
+   * Chooses a best answer
+  **/
+  public function getChoose($id)
+  {
+    //First, let's check if there is an answer with that given ID
+    $answer = Answer::with('questions')->find($id);
+    if($answer)
+    {
+      //Now we should check if the user who clicked is an admin or the owner of the question
+      if(Sentry::getUser()->hasAccess('admin') || $answer->userID == Sentry::getUser()->id)
+      {
+        //First we should unmark all the answers of the question from correct (1) to incorrect (0)
+        Answer::where('questionID',$answer->questionID)->update(array('correct' => 0));
+        //And we should mark the current answer as correct best answer
+        $answer->update(array('correct' => 1));
+        //And now let's return the user back to the questions page
+        return Redirect::route('question_details',array($answer->questionID, Str::slug($answer->questions->title)))
+          ->with('success','Best answer chosen successfully');
+      } else {
+        return Redirect::route('question_details',array($answer->questionID, Str::slug($answer->questions->title)))
+          ->with('error','You don\'t have access to this attempt!');
+      }
+    } else {
+      return Redirect::route('index')
+        ->with('error','Answer not found');
+    }
+  }
+
+  /**
+   * Deletes an answer
+  **/
+  public function getDelete($id)
+  {
+    //First, let's check if there is an answer with that given ID
+    $answer = Answer::with('questions')->find($id);
+    if($answer)
+    {
+      //Now we should check if the user who clicked is an admin or the owner of the question
+      if(Sentry::getUser()->hasAccess('admin') || $answer->userID==Sentry::getUser()->id) {
+        //Now let's delete the answer
+        $delete = Answer::find($id)->delete();
+        //And now let's return the user back to the questions page
+        return Redirect::route('question_details',array($answer->questionID, Str::slug($answer->questions->title)))
+          ->with('success','Answer deleted successfully');
+      } else {
+        return Redirect::route('question_details',array($answer->questionID, Str::slug($answer->questions->title)))
+          ->with('error','You don\'t have access to this attempt');
+      }
+    } else {
+      return Redirect::route('index')
+        ->with('error','Answer not found');
     }
   }
 }
